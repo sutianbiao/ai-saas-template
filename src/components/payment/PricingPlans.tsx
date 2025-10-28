@@ -201,22 +201,31 @@ export default function PricingSection({
     let priceId: string
     let paymentMethod: string
 
+    // 如果 NEXT_PUBLIC_PAYMENT_STRIPE 为 true，则使用 Stripe，否则使用 Creem
+    const useCreem = process.env.NEXT_PUBLIC_PAYMENT_STRIPE !== 'true'
+
     if (locale === 'zh') {
-      // 中文版本：使用人民币价格ID，支持支付宝和信用卡
+      // 中文版本：根据 provider 选择对应价格ID
       if (durationType === 'yearly') {
-        priceId =
-          plan.stripePriceIdCNYYearly || plan.stripePriceIdUSDYearly || ''
+        priceId = useCreem
+          ? plan.creemPriceIdCNYYearly || plan.creemPriceIdUSDYearly || ''
+          : plan.stripePriceIdCNYYearly || plan.stripePriceIdUSDYearly || ''
       } else {
-        priceId =
-          plan.stripePriceIdCNYMonthly || plan.stripePriceIdUSDMonthly || ''
+        priceId = useCreem
+          ? plan.creemPriceIdCNYMonthly || plan.creemPriceIdUSDMonthly || ''
+          : plan.stripePriceIdCNYMonthly || plan.stripePriceIdUSDMonthly || ''
       }
-      paymentMethod = 'alipay' // 中文版本优先使用支付宝
+      paymentMethod = useCreem ? 'card' : 'alipay'
     } else {
-      // 英文版本：使用美元价格ID，支付方式为信用卡
+      // 英文版本：根据 provider 选择 USD 价格ID
       if (durationType === 'yearly') {
-        priceId = plan.stripePriceIdUSDYearly || ''
+        priceId = useCreem
+          ? plan.creemPriceIdUSDYearly || ''
+          : plan.stripePriceIdUSDYearly || ''
       } else {
-        priceId = plan.stripePriceIdUSDMonthly || ''
+        priceId = useCreem
+          ? plan.creemPriceIdUSDMonthly || ''
+          : plan.stripePriceIdUSDMonthly || ''
       }
       paymentMethod = 'card'
     }

@@ -7,9 +7,7 @@ import Link from 'next/link'
 
 export default function AdminLayout({
   children,
-}: {
-  children: React.ReactNode
-}) {
+}: { children: React.ReactNode }) {
   return (
     <AdminGuardClient>
       <div className="flex h-screen bg-background">
@@ -38,6 +36,13 @@ export default function AdminLayout({
               <Link href="/admin/plans">
                 <Sparkles className="mr-2 h-4 w-4" />
                 计划管理
+              </Link>
+            </Button>
+
+            <Button variant="ghost" className="w-full justify-start" asChild>
+              <Link href="/admin/payments">
+                <Sparkles className="mr-2 h-4 w-4" />
+                支付记录
               </Link>
             </Button>
 

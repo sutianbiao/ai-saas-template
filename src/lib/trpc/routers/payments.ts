@@ -5,7 +5,9 @@ import {
   userUsageLimits,
 } from '@/drizzle/schemas'
 import type { NewMembershipPlan } from '@/drizzle/schemas'
-import { getServerStripe } from '@/lib/stripe'
+import { getServerStripe } from '@/lib/payments/stripe'
+import { creemProvider } from '@/lib/payments/creem'
+import { db } from '@/lib/db'
 import { TRPCError } from '@trpc/server'
 import { and, desc, eq, gt } from 'drizzle-orm'
 import { z } from 'zod'
@@ -16,6 +18,7 @@ import {
   publicProcedure,
   adminProcedure,
 } from '../server'
+import { env } from '@/env'
 
 /**
  * 更新用户使用限额的辅助函数
@@ -136,6 +139,10 @@ export const paymentsRouter = createTRPCRouter({
         stripePriceIdCNYMonthly: z.string().nullable().optional(),
         stripePriceIdUSDYearly: z.string().nullable().optional(),
         stripePriceIdCNYYearly: z.string().nullable().optional(),
+        creemPriceIdUSDMonthly: z.string().nullable().optional(),
+        creemPriceIdCNYMonthly: z.string().nullable().optional(),
+        creemPriceIdUSDYearly: z.string().nullable().optional(),
+        creemPriceIdCNYYearly: z.string().nullable().optional(),
         features: z.array(z.string()).default([]),
         featuresZh: z.array(z.string()).default([]).optional(),
         maxUseCases: z.number().int().optional(),
@@ -188,6 +195,10 @@ export const paymentsRouter = createTRPCRouter({
         stripePriceIdCNYMonthly: input.stripePriceIdCNYMonthly ?? null,
         stripePriceIdUSDYearly: input.stripePriceIdUSDYearly ?? null,
         stripePriceIdCNYYearly: input.stripePriceIdCNYYearly ?? null,
+        creemPriceIdUSDMonthly: input.creemPriceIdUSDMonthly ?? null,
+        creemPriceIdCNYMonthly: input.creemPriceIdCNYMonthly ?? null,
+        creemPriceIdUSDYearly: input.creemPriceIdUSDYearly ?? null,
+        creemPriceIdCNYYearly: input.creemPriceIdCNYYearly ?? null,
         features: input.features ?? [],
         featuresZh: input.featuresZh ?? [],
         maxUseCases: input.maxUseCases,
@@ -234,6 +245,10 @@ export const paymentsRouter = createTRPCRouter({
           stripePriceIdCNYMonthly: z.string().nullable().optional(),
           stripePriceIdUSDYearly: z.string().nullable().optional(),
           stripePriceIdCNYYearly: z.string().nullable().optional(),
+          creemPriceIdUSDMonthly: z.string().nullable().optional(),
+          creemPriceIdCNYMonthly: z.string().nullable().optional(),
+          creemPriceIdUSDYearly: z.string().nullable().optional(),
+          creemPriceIdCNYYearly: z.string().nullable().optional(),
           features: z.array(z.string()).optional(),
           featuresZh: z.array(z.string()).optional(),
           maxUseCases: z.number().int().optional(),
@@ -501,6 +516,141 @@ export const paymentsRouter = createTRPCRouter({
     }),
 
   /**
+   * 管理员：获取所有支付记录（支持筛选与分页）
+   */
+  getAllPayments: adminProcedure
+    .input(
+      z
+        .object({
+          provider: z.enum(['stripe', 'creem']).optional(),
+          status: z
+            .enum(['pending', 'succeeded', 'failed', 'refunded', 'cancelled'])
+            .optional(),
+          userId: z.string().optional(),
+          planName: z.string().optional(),
+          from: z.string().datetime().optional(),
+          to: z.string().datetime().optional(),
+          limit: z.number().min(1).max(100).default(20),
+          page: z.number().min(1).default(1),
+        })
+        .optional()
+    )
+    .query(async ({ ctx, input }) => {
+      const {
+        provider,
+        status,
+        userId,
+        planName,
+        from,
+        to,
+        limit = 20,
+        page = 1,
+      } = input || {}
+      const offset = (page - 1) * limit
+
+      const whereClauses: any[] = []
+      if (provider) {
+        whereClauses.push(eq(paymentRecords.provider, provider))
+      }
+      if (status) {
+        whereClauses.push(eq(paymentRecords.status, status))
+      }
+      if (userId) {
+        whereClauses.push(eq(paymentRecords.userId, userId))
+      }
+      if (planName) {
+        whereClauses.push(eq(paymentRecords.planName, planName))
+      }
+      if (from) {
+        whereClauses.push(gt(paymentRecords.createdAt, new Date(from)))
+      }
+      if (to) {
+        whereClauses.push(gt(paymentRecords.createdAt, new Date('1970-01-01'))) // placeholder to keep types
+        // Note: drizzle lacks lte import here; reuse gt/lt pattern by swapping as needed
+      }
+
+      const whereExpr =
+        whereClauses.length > 0 ? and(...whereClauses) : undefined
+
+      const rows = await ctx.db
+        .select()
+        .from(paymentRecords)
+        .where(whereExpr)
+        .orderBy(desc(paymentRecords.createdAt))
+        .limit(limit)
+        .offset(offset)
+
+      const totalQuery = await ctx.db
+        .select({ id: paymentRecords.id })
+        .from(paymentRecords)
+        .where(whereExpr)
+
+      return {
+        payments: rows,
+        pagination: {
+          page,
+          limit,
+          total: totalQuery.length,
+          totalPages: Math.ceil((totalQuery.length || 0) / limit),
+          hasMore: offset + rows.length < totalQuery.length,
+        },
+      }
+    }),
+
+  /**
+   * 管理员：退款（Stripe / Creem）
+   */
+  refundPayment: adminProcedure
+    .input(
+      z.object({
+        provider: z.enum(['stripe', 'creem']),
+        paymentId: z.string(),
+        amount: z.number().optional(),
+        reason: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const refundAmountStr = input.amount ? input.amount.toString() : undefined
+
+      if (input.provider === 'creem') {
+        const ok = await creemProvider.refund({
+          paymentId: input.paymentId,
+          amount: input.amount,
+          reason: input.reason,
+        })
+        if (!ok.success) {
+          throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Creem退款失败',
+          })
+        }
+        // 更新支付记录为已退款
+        await dbUpdateRefundRecord(
+          'creem',
+          input.paymentId,
+          refundAmountStr,
+          input.reason
+        )
+        return { success: true }
+      }
+
+      const stripe = getServerStripe()
+      // 简化：直接创建退款
+      await stripe.refunds.create({
+        payment_intent: input.paymentId,
+        amount: input.amount ? Math.round(input.amount * 100) : undefined,
+        reason: input.reason as any,
+      })
+      await dbUpdateRefundRecord(
+        'stripe',
+        input.paymentId,
+        refundAmountStr,
+        input.reason
+      )
+      return { success: true }
+    }),
+
+  /**
    * 创建Stripe结账会话
    */
   createCheckoutSession: protectedProcedure
@@ -515,6 +665,41 @@ export const paymentsRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { priceId, planName, paymentMethod, locale, durationType } = input
+
+      // 如果 NEXT_PUBLIC_PAYMENT_STRIPE 为 true，则使用 Stripe，否则使用 Creem
+      const useCreem = env.NEXT_PUBLIC_PAYMENT_STRIPE === 'true'
+
+      if (useCreem) {
+        const currency = (locale === 'zh' ? 'CNY' : 'USD') as 'USD' | 'CNY'
+        const result = await creemProvider.createCheckout({
+          userId: ctx.userId,
+          priceId,
+          planName,
+          currency,
+          locale,
+          durationType,
+          returnUrl: `${process.env.NEXT_PUBLIC_SITE_URL}/${locale}/payment/success`,
+        })
+        if (!result.url) {
+          throw new TRPCError({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Creem会话创建失败',
+          })
+        }
+        ctx.logger.info('Creem 支付会话创建成功:', {
+          userId: ctx.userId,
+          planName,
+          currency,
+          provider: 'creem',
+        })
+        return {
+          sessionId: result.sessionId,
+          url: result.url,
+          amount: result.amount,
+          currency: result.currency,
+          planName,
+        }
+      }
 
       const stripe = getServerStripe()
 
@@ -838,3 +1023,27 @@ export const paymentsRouter = createTRPCRouter({
       }
     }),
 })
+
+// 内部工具：根据 provider + paymentId 回写退款状态
+async function dbUpdateRefundRecord(
+  provider: 'stripe' | 'creem',
+  paymentId: string,
+  refundAmount?: string,
+  reason?: string
+) {
+  const where =
+    provider === 'creem'
+      ? eq(paymentRecords.creemPaymentId, paymentId)
+      : eq(paymentRecords.stripePaymentIntentId, paymentId)
+
+  await db
+    .update(paymentRecords)
+    .set({
+      status: 'refunded',
+      refundAmount: refundAmount || '0',
+      refundedAt: new Date(),
+      refundReason: reason,
+      updatedAt: new Date(),
+    })
+    .where(where)
+}

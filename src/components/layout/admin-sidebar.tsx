@@ -50,6 +50,12 @@ const adminNavItems: NavItem[] = [
     badge: null,
   },
   {
+    title: '支付记录',
+    href: '/admin/payments',
+    icon: Home,
+    badge: null,
+  },
+  {
     title: '系统设置',
     href: '/admin/system',
     icon: Settings,

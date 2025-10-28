@@ -1,12 +1,12 @@
 // @ts-nocheck -- skip type checking
-import * as docs_30 from '../src/content/docs/zh/development/project-structure.mdx?collection=docs&hash=1761621197913'
-import * as docs_29 from '../src/content/docs/zh/development/database-development.mdx?collection=docs&hash=1761621197913'
-import * as docs_28 from '../src/content/docs/zh/development/configuration.mdx?collection=docs&hash=1761621197913'
-import * as docs_27 from '../src/content/docs/zh/development/api-development.mdx?collection=docs&hash=1761621197913'
-import * as docs_26 from '../src/content/docs/zh/features/payment-billing.mdx?collection=docs&hash=1761621197913'
-import * as docs_25 from '../src/content/docs/zh/features/file-management.mdx?collection=docs&hash=1761621197913'
-import * as docs_24 from '../src/content/docs/zh/features/authentication.mdx?collection=docs&hash=1761621197913'
-import * as docs_23 from '../src/content/docs/zh/customization/themes.mdx?collection=docs&hash=1761621197913'
+import * as docs_30 from '../src/content/docs/zh/features/payment-billing.mdx?collection=docs&hash=1761621197913'
+import * as docs_29 from '../src/content/docs/zh/features/file-management.mdx?collection=docs&hash=1761621197913'
+import * as docs_28 from '../src/content/docs/zh/features/authentication.mdx?collection=docs&hash=1761621197913'
+import * as docs_27 from '../src/content/docs/zh/customization/themes.mdx?collection=docs&hash=1761621197913'
+import * as docs_26 from '../src/content/docs/zh/development/project-structure.mdx?collection=docs&hash=1761621197913'
+import * as docs_25 from '../src/content/docs/zh/development/database-development.mdx?collection=docs&hash=1761621197913'
+import * as docs_24 from '../src/content/docs/zh/development/configuration.mdx?collection=docs&hash=1761621197913'
+import * as docs_23 from '../src/content/docs/zh/development/api-development.mdx?collection=docs&hash=1761621197913'
 import * as docs_22 from '../src/content/docs/zh/Deployment/vercel.mdx?collection=docs&hash=1761621197913'
 import * as docs_21 from '../src/content/docs/zh/Deployment/production-setup.mdx?collection=docs&hash=1761621197913'
 import * as docs_20 from '../src/content/docs/zh/Deployment/docker.mdx?collection=docs&hash=1761621197913'
@@ -15,14 +15,14 @@ import * as docs_18 from '../src/content/docs/en/features/payment-billing.mdx?co
 import * as docs_17 from '../src/content/docs/en/features/internationalization.mdx?collection=docs&hash=1761621197913'
 import * as docs_16 from '../src/content/docs/en/features/file-management.mdx?collection=docs&hash=1761621197913'
 import * as docs_15 from '../src/content/docs/en/features/authentication.mdx?collection=docs&hash=1761621197913'
-import * as docs_14 from '../src/content/docs/en/development/project-structure.mdx?collection=docs&hash=1761621197913'
-import * as docs_13 from '../src/content/docs/en/development/database-development.mdx?collection=docs&hash=1761621197913'
-import * as docs_12 from '../src/content/docs/en/development/configuration.mdx?collection=docs&hash=1761621197913'
-import * as docs_11 from '../src/content/docs/en/development/api-development.mdx?collection=docs&hash=1761621197913'
-import * as docs_10 from '../src/content/docs/en/deployment/vercel.mdx?collection=docs&hash=1761621197913'
-import * as docs_9 from '../src/content/docs/en/deployment/production-setup.mdx?collection=docs&hash=1761621197913'
-import * as docs_8 from '../src/content/docs/en/deployment/docker.mdx?collection=docs&hash=1761621197913'
-import * as docs_7 from '../src/content/docs/en/deployment/ci-cd.mdx?collection=docs&hash=1761621197913'
+import * as docs_14 from '../src/content/docs/en/deployment/vercel.mdx?collection=docs&hash=1761621197913'
+import * as docs_13 from '../src/content/docs/en/deployment/production-setup.mdx?collection=docs&hash=1761621197913'
+import * as docs_12 from '../src/content/docs/en/deployment/docker.mdx?collection=docs&hash=1761621197913'
+import * as docs_11 from '../src/content/docs/en/deployment/ci-cd.mdx?collection=docs&hash=1761621197913'
+import * as docs_10 from '../src/content/docs/en/development/project-structure.mdx?collection=docs&hash=1761621197913'
+import * as docs_9 from '../src/content/docs/en/development/database-development.mdx?collection=docs&hash=1761621197913'
+import * as docs_8 from '../src/content/docs/en/development/configuration.mdx?collection=docs&hash=1761621197913'
+import * as docs_7 from '../src/content/docs/en/development/api-development.mdx?collection=docs&hash=1761621197913'
 import * as docs_6 from '../src/content/docs/en/customization/themes.mdx?collection=docs&hash=1761621197913'
 import * as docs_5 from '../src/content/docs/zh/quickstart.mdx?collection=docs&hash=1761621197913'
 import * as docs_4 from '../src/content/docs/zh/index.mdx?collection=docs&hash=1761621197913'
@@ -30,47 +30,23 @@ import * as docs_3 from '../src/content/docs/zh/architecture.mdx?collection=docs
 import * as docs_2 from '../src/content/docs/en/quickstart.mdx?collection=docs&hash=1761621197913'
 import * as docs_1 from '../src/content/docs/en/index.mdx?collection=docs&hash=1761621197913'
 import * as docs_0 from '../src/content/docs/en/architecture.mdx?collection=docs&hash=1761621197913'
-import * as blog_5 from '../src/content/blog/zh/typescript-advanced-patterns.mdx?collection=blog&hash=1761621197913'
-import * as blog_4 from '../src/content/blog/zh/tailwind-css-best-practices.mdx?collection=blog&hash=1761621197913'
-import * as blog_3 from '../src/content/blog/zh/getting-started-with-nextjs.mdx?collection=blog&hash=1761621197913'
-import * as blog_2 from '../src/content/blog/en/typescript-advanced-patterns.mdx?collection=blog&hash=1761621197913'
-import * as blog_1 from '../src/content/blog/en/tailwind-css-best-practices.mdx?collection=blog&hash=1761621197913'
-import * as blog_0 from '../src/content/blog/en/getting-started-with-nextjs.mdx?collection=blog&hash=1761621197913'
+import * as blog_5 from '../src/content/blog/en/typescript-advanced-patterns.mdx?collection=blog&hash=1761621197913'
+import * as blog_4 from '../src/content/blog/en/tailwind-css-best-practices.mdx?collection=blog&hash=1761621197913'
+import * as blog_3 from '../src/content/blog/en/getting-started-with-nextjs.mdx?collection=blog&hash=1761621197913'
+import * as blog_2 from '../src/content/blog/zh/typescript-advanced-patterns.mdx?collection=blog&hash=1761621197913'
+import * as blog_1 from '../src/content/blog/zh/tailwind-css-best-practices.mdx?collection=blog&hash=1761621197913'
+import * as blog_0 from '../src/content/blog/zh/getting-started-with-nextjs.mdx?collection=blog&hash=1761621197913'
 import { _runtime } from 'fumadocs-mdx'
 import * as _source from '../source.config'
 export const blog = _runtime.docs<typeof _source.blog>(
   [
     {
       info: {
-        path: 'en/getting-started-with-nextjs.mdx',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/blog/en/getting-started-with-nextjs.mdx',
-      },
-      data: blog_0,
-    },
-    {
-      info: {
-        path: 'en/tailwind-css-best-practices.mdx',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/blog/en/tailwind-css-best-practices.mdx',
-      },
-      data: blog_1,
-    },
-    {
-      info: {
-        path: 'en/typescript-advanced-patterns.mdx',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/blog/en/typescript-advanced-patterns.mdx',
-      },
-      data: blog_2,
-    },
-    {
-      info: {
         path: 'zh/getting-started-with-nextjs.mdx',
         absolutePath:
           '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/blog/zh/getting-started-with-nextjs.mdx',
       },
-      data: blog_3,
+      data: blog_0,
     },
     {
       info: {
@@ -78,7 +54,7 @@ export const blog = _runtime.docs<typeof _source.blog>(
         absolutePath:
           '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/blog/zh/tailwind-css-best-practices.mdx',
       },
-      data: blog_4,
+      data: blog_1,
     },
     {
       info: {
@@ -86,18 +62,34 @@ export const blog = _runtime.docs<typeof _source.blog>(
         absolutePath:
           '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/blog/zh/typescript-advanced-patterns.mdx',
       },
+      data: blog_2,
+    },
+    {
+      info: {
+        path: 'en/getting-started-with-nextjs.mdx',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/blog/en/getting-started-with-nextjs.mdx',
+      },
+      data: blog_3,
+    },
+    {
+      info: {
+        path: 'en/tailwind-css-best-practices.mdx',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/blog/en/tailwind-css-best-practices.mdx',
+      },
+      data: blog_4,
+    },
+    {
+      info: {
+        path: 'en/typescript-advanced-patterns.mdx',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/blog/en/typescript-advanced-patterns.mdx',
+      },
       data: blog_5,
     },
   ],
   [
-    {
-      info: {
-        path: 'zh/meta.json',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/blog/zh/meta.json',
-      },
-      data: { title: '博客', description: '分享技术见解和经验' },
-    },
     {
       info: {
         path: 'en/meta.json',
@@ -108,6 +100,14 @@ export const blog = _runtime.docs<typeof _source.blog>(
         title: 'Blog',
         description: 'Share technical insights and experiences',
       },
+    },
+    {
+      info: {
+        path: 'zh/meta.json',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/blog/zh/meta.json',
+      },
+      data: { title: '博客', description: '分享技术见解和经验' },
     },
   ]
 )
@@ -171,43 +171,11 @@ export const docs = _runtime.docs<typeof _source.docs>(
     },
     {
       info: {
-        path: 'en/deployment/ci-cd.mdx',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/deployment/ci-cd.mdx',
-      },
-      data: docs_7,
-    },
-    {
-      info: {
-        path: 'en/deployment/docker.mdx',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/deployment/docker.mdx',
-      },
-      data: docs_8,
-    },
-    {
-      info: {
-        path: 'en/deployment/production-setup.mdx',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/deployment/production-setup.mdx',
-      },
-      data: docs_9,
-    },
-    {
-      info: {
-        path: 'en/deployment/vercel.mdx',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/deployment/vercel.mdx',
-      },
-      data: docs_10,
-    },
-    {
-      info: {
         path: 'en/development/api-development.mdx',
         absolutePath:
           '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/development/api-development.mdx',
       },
-      data: docs_11,
+      data: docs_7,
     },
     {
       info: {
@@ -215,7 +183,7 @@ export const docs = _runtime.docs<typeof _source.docs>(
         absolutePath:
           '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/development/configuration.mdx',
       },
-      data: docs_12,
+      data: docs_8,
     },
     {
       info: {
@@ -223,13 +191,45 @@ export const docs = _runtime.docs<typeof _source.docs>(
         absolutePath:
           '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/development/database-development.mdx',
       },
-      data: docs_13,
+      data: docs_9,
     },
     {
       info: {
         path: 'en/development/project-structure.mdx',
         absolutePath:
           '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/development/project-structure.mdx',
+      },
+      data: docs_10,
+    },
+    {
+      info: {
+        path: 'en/deployment/ci-cd.mdx',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/deployment/ci-cd.mdx',
+      },
+      data: docs_11,
+    },
+    {
+      info: {
+        path: 'en/deployment/docker.mdx',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/deployment/docker.mdx',
+      },
+      data: docs_12,
+    },
+    {
+      info: {
+        path: 'en/deployment/production-setup.mdx',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/deployment/production-setup.mdx',
+      },
+      data: docs_13,
+    },
+    {
+      info: {
+        path: 'en/deployment/vercel.mdx',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/deployment/vercel.mdx',
       },
       data: docs_14,
     },
@@ -299,43 +299,11 @@ export const docs = _runtime.docs<typeof _source.docs>(
     },
     {
       info: {
-        path: 'zh/customization/themes.mdx',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/customization/themes.mdx',
-      },
-      data: docs_23,
-    },
-    {
-      info: {
-        path: 'zh/features/authentication.mdx',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/features/authentication.mdx',
-      },
-      data: docs_24,
-    },
-    {
-      info: {
-        path: 'zh/features/file-management.mdx',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/features/file-management.mdx',
-      },
-      data: docs_25,
-    },
-    {
-      info: {
-        path: 'zh/features/payment-billing.mdx',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/features/payment-billing.mdx',
-      },
-      data: docs_26,
-    },
-    {
-      info: {
         path: 'zh/development/api-development.mdx',
         absolutePath:
           '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/development/api-development.mdx',
       },
-      data: docs_27,
+      data: docs_23,
     },
     {
       info: {
@@ -343,7 +311,7 @@ export const docs = _runtime.docs<typeof _source.docs>(
         absolutePath:
           '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/development/configuration.mdx',
       },
-      data: docs_28,
+      data: docs_24,
     },
     {
       info: {
@@ -351,7 +319,7 @@ export const docs = _runtime.docs<typeof _source.docs>(
         absolutePath:
           '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/development/database-development.mdx',
       },
-      data: docs_29,
+      data: docs_25,
     },
     {
       info: {
@@ -359,10 +327,61 @@ export const docs = _runtime.docs<typeof _source.docs>(
         absolutePath:
           '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/development/project-structure.mdx',
       },
+      data: docs_26,
+    },
+    {
+      info: {
+        path: 'zh/customization/themes.mdx',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/customization/themes.mdx',
+      },
+      data: docs_27,
+    },
+    {
+      info: {
+        path: 'zh/features/authentication.mdx',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/features/authentication.mdx',
+      },
+      data: docs_28,
+    },
+    {
+      info: {
+        path: 'zh/features/file-management.mdx',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/features/file-management.mdx',
+      },
+      data: docs_29,
+    },
+    {
+      info: {
+        path: 'zh/features/payment-billing.mdx',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/features/payment-billing.mdx',
+      },
       data: docs_30,
     },
   ],
   [
+    {
+      info: {
+        path: 'en/meta.json',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/meta.json',
+      },
+      data: {
+        title: 'Documentation',
+        pages: [
+          'index',
+          'quickstart',
+          'architecture',
+          'deployment',
+          'development',
+          'features',
+          'customization',
+        ],
+      },
+    },
     {
       info: {
         path: 'zh/meta.json',
@@ -384,21 +403,68 @@ export const docs = _runtime.docs<typeof _source.docs>(
     },
     {
       info: {
-        path: 'en/meta.json',
+        path: 'en/customization/meta.json',
         absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/meta.json',
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/customization/meta.json',
+      },
+      data: { title: 'Customization', pages: ['themes'], defaultOpen: true },
+    },
+    {
+      info: {
+        path: 'en/deployment/meta.json',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/deployment/meta.json',
       },
       data: {
-        title: 'Documentation',
+        title: 'Deployment',
+        pages: ['vercel', 'docker'],
+        defaultOpen: true,
+      },
+    },
+    {
+      info: {
+        path: 'en/development/meta.json',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/development/meta.json',
+      },
+      data: {
+        title: 'Developer Guide',
         pages: [
-          'index',
-          'quickstart',
-          'architecture',
-          'deployment',
-          'development',
-          'features',
-          'customization',
+          'configuration',
+          'project-structure',
+          'database-development',
+          'api-development',
         ],
+        defaultOpen: true,
+      },
+    },
+    {
+      info: {
+        path: 'en/features/meta.json',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/features/meta.json',
+      },
+      data: {
+        title: 'Features',
+        pages: ['authentication', 'file-management', 'payment-billing'],
+        defaultOpen: true,
+      },
+    },
+    {
+      info: {
+        path: 'zh/development/meta.json',
+        absolutePath:
+          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/development/meta.json',
+      },
+      data: {
+        title: '开发者指南',
+        pages: [
+          'configuration',
+          'project-structure',
+          'database-development',
+          'api-development',
+        ],
+        defaultOpen: true,
       },
     },
     {
@@ -423,23 +489,6 @@ export const docs = _runtime.docs<typeof _source.docs>(
     },
     {
       info: {
-        path: 'zh/development/meta.json',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/development/meta.json',
-      },
-      data: {
-        title: '开发者指南',
-        pages: [
-          'configuration',
-          'project-structure',
-          'database-development',
-          'api-development',
-        ],
-        defaultOpen: true,
-      },
-    },
-    {
-      info: {
         path: 'zh/features/meta.json',
         absolutePath:
           '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/zh/features/meta.json',
@@ -447,55 +496,6 @@ export const docs = _runtime.docs<typeof _source.docs>(
       data: {
         title: '项目特色',
         pages: ['authentication', 'file-management', 'payment-billing'],
-        defaultOpen: true,
-      },
-    },
-    {
-      info: {
-        path: 'en/deployment/meta.json',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/deployment/meta.json',
-      },
-      data: {
-        title: 'Deployment',
-        pages: ['vercel', 'docker'],
-        defaultOpen: true,
-      },
-    },
-    {
-      info: {
-        path: 'en/features/meta.json',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/features/meta.json',
-      },
-      data: {
-        title: 'Features',
-        pages: ['authentication', 'file-management', 'payment-billing'],
-        defaultOpen: true,
-      },
-    },
-    {
-      info: {
-        path: 'en/customization/meta.json',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/customization/meta.json',
-      },
-      data: { title: 'Customization', pages: ['themes'], defaultOpen: true },
-    },
-    {
-      info: {
-        path: 'en/development/meta.json',
-        absolutePath:
-          '/home/ubt/work/workspace/ubt_2025/ai-saas-template/src/content/docs/en/development/meta.json',
-      },
-      data: {
-        title: 'Developer Guide',
-        pages: [
-          'configuration',
-          'project-structure',
-          'database-development',
-          'api-development',
-        ],
         defaultOpen: true,
       },
     },

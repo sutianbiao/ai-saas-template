@@ -3,15 +3,32 @@
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { Skeleton } from '@/components/ui/skeleton'
 import { PAYMENT_STATUS, formatPrice } from '@/constants/payment'
 import { trpc } from '@/lib/trpc/client'
 import { useUser } from '@clerk/nextjs'
+import { useAuth as useAuthHook } from '@/hooks/use-trpc'
+import { toast } from 'sonner'
 import { CreditCard, ExternalLink } from 'lucide-react'
 import Link from 'next/link'
+import { useState } from 'react'
 
 export function PaymentHistoryClient() {
   const { isSignedIn } = useUser()
+  const { isAdmin } = useAuthHook()
   const { data, isLoading, error } = trpc.payments.getPaymentHistory.useQuery(
     { limit: 5 },
     {
@@ -20,6 +37,19 @@ export function PaymentHistoryClient() {
       gcTime: 10 * 60 * 1000, // 10分钟垃圾回收
     }
   )
+
+  const refundMutation = trpc.payments.refundPayment.useMutation({
+    onSuccess: () => toast.success('退款操作已提交'),
+    onError: err => toast.error('退款失败', { description: err.message }),
+  })
+
+  // 退款确认对话框状态
+  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [confirmTarget, setConfirmTarget] = useState<{
+    provider: 'stripe' | 'creem'
+    paymentId: string
+    amount?: number
+  } | null>(null)
 
   if (!isSignedIn) {
     return (
@@ -65,6 +95,31 @@ export function PaymentHistoryClient() {
 
   return (
     <Card>
+      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>确认退款</DialogTitle>
+          </DialogHeader>
+          <div className="text-sm text-muted-foreground">
+            确认对该笔订单发起退款操作？该操作可能不可逆。
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setConfirmOpen(false)}>
+              取消
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (!confirmTarget) return
+                refundMutation.mutate(confirmTarget)
+                setConfirmOpen(false)
+              }}
+            >
+              确认退款
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="flex items-center gap-2">
           <CreditCard className="h-5 w-5" />
@@ -94,6 +149,16 @@ export function PaymentHistoryClient() {
               const statusConfig =
                 PAYMENT_STATUS[payment.status as keyof typeof PAYMENT_STATUS]
               const paymentDate = new Date(payment.createdAt)
+              const isRefunded =
+                payment.status === 'refunded' || Boolean(payment.refundedAt)
+              const provider = (payment.provider ||
+                (payment.paymentMethod === 'creem' ? 'creem' : 'stripe')) as
+                | 'stripe'
+                | 'creem'
+              const providerBadgeClass =
+                provider === 'creem'
+                  ? 'bg-emerald-100 text-emerald-700'
+                  : 'bg-blue-100 text-blue-700'
 
               return (
                 <div
@@ -111,7 +176,7 @@ export function PaymentHistoryClient() {
                         {statusConfig?.labelZh || payment.status}
                       </Badge>
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                       <span>
                         {paymentDate.toLocaleDateString('zh-CN', {
                           year: 'numeric',
@@ -122,10 +187,53 @@ export function PaymentHistoryClient() {
                       <span>
                         {payment.durationType === 'yearly' ? '年付' : '月付'}
                       </span>
+                      <Badge className={providerBadgeClass}>{provider}</Badge>
                       {payment.paymentMethod && (
                         <span className="capitalize">
                           {payment.paymentMethod}
                         </span>
+                      )}
+                      {payment.stripePaymentIntentId && (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button
+                                className="truncate max-w-[160px] underline decoration-dotted"
+                                onClick={() => {
+                                  navigator.clipboard.writeText(
+                                    payment.stripePaymentIntentId as string
+                                  )
+                                  toast.success('已复制 Intent ID')
+                                }}
+                                title={payment.stripePaymentIntentId as string}
+                              >
+                                intent: {payment.stripePaymentIntentId}
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent>点击复制</TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      )}
+                      {payment.creemPaymentId && (
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button
+                                className="truncate max-w-[160px] underline decoration-dotted"
+                                onClick={() => {
+                                  navigator.clipboard.writeText(
+                                    payment.creemPaymentId as string
+                                  )
+                                  toast.success('已复制 Creem ID')
+                                }}
+                                title={payment.creemPaymentId as string}
+                              >
+                                creem: {payment.creemPaymentId}
+                              </button>
+                            </TooltipTrigger>
+                            <TooltipContent>点击复制</TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       )}
                     </div>
                   </div>
@@ -146,6 +254,34 @@ export function PaymentHistoryClient() {
                           )}
                         </p>
                       )}
+                    {/* 管理员快捷退款 + 二次确认 */}
+                    {isSignedIn && isAdmin && (
+                      <div className="pt-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled={refundMutation.isPending || isRefunded}
+                          onClick={() => {
+                            const paymentId =
+                              provider === 'creem'
+                                ? (payment.creemPaymentId as string)
+                                : (payment.stripePaymentIntentId as string)
+                            if (!paymentId) {
+                              toast.error('缺少交易号，无法退款')
+                              return
+                            }
+                            setConfirmTarget({
+                              provider,
+                              paymentId,
+                              amount: Number(payment.amount),
+                            })
+                            setConfirmOpen(true)
+                          }}
+                        >
+                          {isRefunded ? '已退款' : '退款'}
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 </div>
               )

@@ -1,4 +1,4 @@
-import { getServerStripe } from '@/lib/stripe'
+import { getServerStripe } from '@/lib/payments/stripe'
 import { auth } from '@clerk/nextjs/server'
 import { type NextRequest, NextResponse } from 'next/server'
 

@@ -54,6 +54,20 @@ export const membershipPlans = pgTable(
       length: 255,
     }),
 
+    // Creem 价格ID
+    creemPriceIdUSDMonthly: varchar('creem_price_id_usd_monthly', {
+      length: 255,
+    }),
+    creemPriceIdCNYMonthly: varchar('creem_price_id_cny_monthly', {
+      length: 255,
+    }),
+    creemPriceIdUSDYearly: varchar('creem_price_id_usd_yearly', {
+      length: 255,
+    }),
+    creemPriceIdCNYYearly: varchar('creem_price_id_cny_yearly', {
+      length: 255,
+    }),
+
     // 功能配额
     features: jsonb('features').$type<string[]>().notNull().default([]),
     featuresZh: jsonb('features_zh').$type<string[]>().default([]),
@@ -205,10 +219,16 @@ export const paymentRecords = pgTable(
     status: varchar('status', { length: 50 }).notNull(), // pending, succeeded, failed, refunded, cancelled
     paymentMethod: varchar('payment_method', { length: 50 }),
 
+    // 支付提供方（stripe/creem 等）
+    provider: varchar('provider', { length: 20 }),
+
     // 订单信息
     planName: varchar('plan_name', { length: 100 }).notNull(),
     durationType: varchar('duration_type', { length: 20 }).notNull(),
     membershipDurationDays: integer('membership_duration_days').notNull(),
+
+    // Creem 支付ID
+    creemPaymentId: varchar('creem_payment_id', { length: 255 }),
 
     // 优惠信息
     couponCode: varchar('coupon_code', { length: 50 }),

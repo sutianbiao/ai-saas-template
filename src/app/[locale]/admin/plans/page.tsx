@@ -1,5 +1,7 @@
 'use client'
 
+// 计划管理页面（Admin）：支持列表展示、创建/编辑、上下线与排序
+
 import { AdminGuardClient } from '@/components/auth'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -20,6 +22,7 @@ import { Loader2, Plus, Save, Trash, ArrowUp, ArrowDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 
+// 表单数据结构（包含多语言、价格、Stripe、配额与展示控制）
 interface PlanFormState {
   id?: string
   name: string
@@ -35,6 +38,11 @@ interface PlanFormState {
   stripePriceIdCNYMonthly?: string | null
   stripePriceIdUSDYearly?: string | null
   stripePriceIdCNYYearly?: string | null
+  // Creem 价格ID
+  creemPriceIdUSDMonthly?: string | null
+  creemPriceIdCNYMonthly?: string | null
+  creemPriceIdUSDYearly?: string | null
+  creemPriceIdCNYYearly?: string | null
   features: string[]
   featuresZh?: string[]
   maxUseCases?: number
@@ -57,6 +65,7 @@ interface PlanFormState {
   sortOrder?: number
 }
 
+// 表单默认值（包含合理的布尔与数值初始状态）
 function defaultForm(): PlanFormState {
   return {
     name: '',
@@ -72,6 +81,10 @@ function defaultForm(): PlanFormState {
     stripePriceIdCNYMonthly: null,
     stripePriceIdUSDYearly: null,
     stripePriceIdCNYYearly: null,
+    creemPriceIdUSDMonthly: null,
+    creemPriceIdCNYMonthly: null,
+    creemPriceIdUSDYearly: null,
+    creemPriceIdCNYYearly: null,
     features: [],
     featuresZh: [],
     maxUseCases: -1,
@@ -103,6 +116,7 @@ export default function AdminPlansPage() {
   )
 }
 
+// 列表骨架屏（加载态占位），与其他模块风格一致
 function PlanListSkeleton() {
   return (
     <div className="space-y-4">
@@ -181,11 +195,13 @@ function PlansContent() {
       onSuccess: () => utils.payments.getMembershipPlans.invalidate(),
     })
 
+  // 新建弹窗
   function handleAdd() {
     setForm(defaultForm())
     setOpen(true)
   }
 
+  // 编辑弹窗
   function handleEdit(p: any) {
     setForm({ ...p })
     setOpen(true)
@@ -194,6 +210,7 @@ function PlansContent() {
   async function handleSave() {
     setSaving(true)
     try {
+      // 基础必填校验：名称 + USD 月付价格
       if (!form.name || !form.priceUSDMonthly) {
         toast.error('请填写必填项：名称、月付USD价格')
         return
@@ -209,10 +226,12 @@ function PlansContent() {
     }
   }
 
+  // 删除计划
   function handleDelete(id: string) {
     deleteMutation.mutate({ id })
   }
 
+  // 简单的上/下移动并提交排序到后端（无需拖拽依赖）
   function moveItem(id: string, direction: 'up' | 'down') {
     const index = items.findIndex(i => i.id === id)
     if (index < 0) return
@@ -273,11 +292,13 @@ function PlansContent() {
                       )}
                     </div>
                     <div className="text-sm text-muted-foreground">
+                      {/* 行内信息：价格与排序 */}
                       月: ${item.priceUSDMonthly} / 年: $
                       {item.priceUSDYearly ?? '-'} | 排序:{' '}
                       {item.sortOrder ?? idx}
                     </div>
                     <div className="mt-3 flex items-center gap-4 text-sm">
+                      {/* 上/下线、热门、推荐快捷开关 */}
                       <div className="flex items-center gap-2">
                         <Switch
                           checked={!!item.isActive}
@@ -317,6 +338,7 @@ function PlansContent() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
+                    {/* 排序按钮：上移/下移 */}
                     <Button
                       variant="ghost"
                       size="icon"
@@ -333,6 +355,7 @@ function PlansContent() {
                     >
                       <ArrowDown className="h-4 w-4" />
                     </Button>
+                    {/* 行内编辑与删除 */}
                     <Button variant="ghost" onClick={() => handleEdit(item)}>
                       编辑
                     </Button>
@@ -506,6 +529,55 @@ function PlansContent() {
                     setForm(f => ({
                       ...f,
                       stripePriceIdCNYYearly: e.target.value || null,
+                    }))
+                  }
+                />
+              </div>
+
+              <div>
+                <Label>Creem Price USD 月付</Label>
+                <Input
+                  value={form.creemPriceIdUSDMonthly || ''}
+                  onChange={e =>
+                    setForm(f => ({
+                      ...f,
+                      creemPriceIdUSDMonthly: e.target.value || null,
+                    }))
+                  }
+                />
+              </div>
+              <div>
+                <Label>Creem Price USD 年付</Label>
+                <Input
+                  value={form.creemPriceIdUSDYearly || ''}
+                  onChange={e =>
+                    setForm(f => ({
+                      ...f,
+                      creemPriceIdUSDYearly: e.target.value || null,
+                    }))
+                  }
+                />
+              </div>
+              <div>
+                <Label>Creem Price CNY 月付</Label>
+                <Input
+                  value={form.creemPriceIdCNYMonthly || ''}
+                  onChange={e =>
+                    setForm(f => ({
+                      ...f,
+                      creemPriceIdCNYMonthly: e.target.value || null,
+                    }))
+                  }
+                />
+              </div>
+              <div>
+                <Label>Creem Price CNY 年付</Label>
+                <Input
+                  value={form.creemPriceIdCNYYearly || ''}
+                  onChange={e =>
+                    setForm(f => ({
+                      ...f,
+                      creemPriceIdCNYYearly: e.target.value || null,
                     }))
                   }
                 />

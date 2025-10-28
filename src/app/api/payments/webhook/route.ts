@@ -6,7 +6,7 @@ import {
 } from '@/drizzle/schemas'
 import { db } from '@/lib/db'
 import { logger } from '@/lib/logger'
-import { verifyStripeWebhook } from '@/lib/stripe'
+import { verifyStripeWebhook } from '@/lib/payments/stripe'
 import { eq } from 'drizzle-orm'
 import { type NextRequest, NextResponse } from 'next/server'
 import type Stripe from 'stripe'

@@ -439,7 +439,7 @@ export const aiRouter = createTRPCRouter({
 import { z } from 'zod'
 import { TRPCError } from '@trpc/server'
 import { createTRPCRouter, protectedProcedure } from '../server'
-import { createStripeCheckoutSession, createStripePortalSession } from '@/lib/stripe'
+import { createStripeCheckoutSession, createStripePortalSession } from '@/lib/payments/stripe'
 import { getUserPayments, getActiveSubscription } from '@/lib/db/queries/payments'
 
 export const paymentRouter = createTRPCRouter({
@@ -640,7 +640,7 @@ export const adminRouter = createTRPCRouter({
 import { NextRequest, NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 import Stripe from 'stripe'
-import { stripe } from '@/lib/stripe'
+import { stripe } from '@/lib/payments/stripe'
 import { db } from '@/lib/db'
 import { users, payments } from '@/lib/db/schema'
 import { createPayment, updatePaymentStatus } from '@/lib/db/queries/payments'

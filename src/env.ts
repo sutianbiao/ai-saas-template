@@ -18,6 +18,11 @@ export const env = createEnv({
     STRIPE_SECRET_KEY: z.string().min(1),
     STRIPE_WEBHOOK_SECRET: z.string().min(1),
 
+    // Creem (可选启用)
+    CREEM_API_KEY: z.string().optional(),
+    CREEM_WEBHOOK_SECRET: z.string().optional(),
+    CREEM_API_BASE: z.string().url().optional(),
+
     // AI API Keys (至少需要一个)
     OPENAI_API_KEY: z.string().optional(),
     ANTHROPIC_API_KEY: z.string().optional(),
@@ -87,6 +92,7 @@ export const env = createEnv({
 
     // Stripe (必需)
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1),
+    NEXT_PUBLIC_PAYMENT_STRIPE: z.string().default('false'),
 
     // Feature flags (客户端)
     NEXT_PUBLIC_ENABLE_AI_FEATURES: z.string().default('true'),
@@ -116,6 +122,9 @@ export const env = createEnv({
     CLERK_WEBHOOK_SECRET: process.env.CLERK_WEBHOOK_SECRET,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    CREEM_API_KEY: process.env.CREEM_API_KEY,
+    CREEM_WEBHOOK_SECRET: process.env.CREEM_WEBHOOK_SECRET,
+    CREEM_API_BASE: process.env.CREEM_API_BASE,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
@@ -153,6 +162,7 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,
+    NEXT_PUBLIC_PAYMENT_STRIPE: process.env.NEXT_PUBLIC_PAYMENT_STRIPE,
     NEXT_PUBLIC_ENABLE_AI_FEATURES: process.env.NEXT_PUBLIC_ENABLE_AI_FEATURES,
     NEXT_PUBLIC_ENABLE_PAYMENT_FEATURES:
       process.env.NEXT_PUBLIC_ENABLE_PAYMENT_FEATURES,
