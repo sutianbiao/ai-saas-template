@@ -4,6 +4,7 @@ import {
   userMemberships,
   userUsageLimits,
 } from '@/drizzle/schemas'
+import type { NewMembershipPlan } from '@/drizzle/schemas'
 import { getServerStripe } from '@/lib/stripe'
 import { TRPCError } from '@trpc/server'
 import { and, desc, eq, gt } from 'drizzle-orm'
@@ -13,6 +14,7 @@ import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
+  adminProcedure,
 } from '../server'
 
 /**
@@ -113,6 +115,252 @@ export const paymentsRouter = createTRPCRouter({
         features: Array.isArray(plan.features) ? plan.features : [],
         featuresZh: Array.isArray(plan.featuresZh) ? plan.featuresZh : [],
       }))
+    }),
+
+  /**
+   * 管理员：创建会员计划
+   */
+  createMembershipPlan: adminProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        nameZh: z.string().optional(),
+        description: z.string().optional(),
+        descriptionZh: z.string().optional(),
+        priceUSDMonthly: z.string(),
+        priceCNYMonthly: z.string().nullable().optional(),
+        priceUSDYearly: z.string().nullable().optional(),
+        priceCNYYearly: z.string().nullable().optional(),
+        yearlyDiscountPercent: z.number().int().min(0).max(100).optional(),
+        stripePriceIdUSDMonthly: z.string().nullable().optional(),
+        stripePriceIdCNYMonthly: z.string().nullable().optional(),
+        stripePriceIdUSDYearly: z.string().nullable().optional(),
+        stripePriceIdCNYYearly: z.string().nullable().optional(),
+        features: z.array(z.string()).default([]),
+        featuresZh: z.array(z.string()).default([]).optional(),
+        maxUseCases: z.number().int().optional(),
+        maxTutorials: z.number().int().optional(),
+        maxBlogs: z.number().int().optional(),
+        maxApiCalls: z.number().int().optional(),
+        permissions: z
+          .object({
+            apiAccess: z.boolean().optional(),
+            customModels: z.boolean().optional(),
+            prioritySupport: z.boolean().optional(),
+            exportData: z.boolean().optional(),
+            bulkOperations: z.boolean().optional(),
+            advancedAnalytics: z.boolean().optional(),
+          })
+          .optional(),
+        monthlyDurationDays: z.number().int().optional(),
+        yearlyDurationDays: z.number().int().optional(),
+        isActive: z.boolean().optional(),
+        isPopular: z.boolean().optional(),
+        isFeatured: z.boolean().optional(),
+        sortOrder: z.number().int().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const now = new Date()
+
+      const permissions: NonNullable<NewMembershipPlan['permissions']> = {
+        apiAccess: Boolean(input.permissions?.apiAccess ?? false),
+        customModels: Boolean(input.permissions?.customModels ?? false),
+        prioritySupport: Boolean(input.permissions?.prioritySupport ?? false),
+        exportData: Boolean(input.permissions?.exportData ?? true),
+        bulkOperations: Boolean(input.permissions?.bulkOperations ?? false),
+        advancedAnalytics: Boolean(
+          input.permissions?.advancedAnalytics ?? false
+        ),
+      }
+
+      const insertData: NewMembershipPlan = {
+        name: input.name,
+        nameZh: input.nameZh,
+        description: input.description,
+        descriptionZh: input.descriptionZh,
+        priceUSDMonthly: input.priceUSDMonthly,
+        priceCNYMonthly: input.priceCNYMonthly ?? null,
+        priceUSDYearly: input.priceUSDYearly ?? null,
+        priceCNYYearly: input.priceCNYYearly ?? null,
+        yearlyDiscountPercent: input.yearlyDiscountPercent,
+        stripePriceIdUSDMonthly: input.stripePriceIdUSDMonthly ?? null,
+        stripePriceIdCNYMonthly: input.stripePriceIdCNYMonthly ?? null,
+        stripePriceIdUSDYearly: input.stripePriceIdUSDYearly ?? null,
+        stripePriceIdCNYYearly: input.stripePriceIdCNYYearly ?? null,
+        features: input.features ?? [],
+        featuresZh: input.featuresZh ?? [],
+        maxUseCases: input.maxUseCases,
+        maxTutorials: input.maxTutorials,
+        maxBlogs: input.maxBlogs,
+        maxApiCalls: input.maxApiCalls,
+        permissions,
+        monthlyDurationDays: input.monthlyDurationDays,
+        yearlyDurationDays: input.yearlyDurationDays,
+        isActive: input.isActive,
+        isPopular: input.isPopular,
+        isFeatured: input.isFeatured,
+        sortOrder: input.sortOrder,
+        createdAt: now,
+        updatedAt: now,
+      }
+
+      const [plan] = await ctx.db
+        .insert(membershipPlans)
+        .values(insertData)
+        .returning()
+
+      return plan
+    }),
+
+  /**
+   * 管理员：更新会员计划
+   */
+  updateMembershipPlan: adminProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        data: z.object({
+          name: z.string().min(1).optional(),
+          nameZh: z.string().optional(),
+          description: z.string().optional(),
+          descriptionZh: z.string().optional(),
+          priceUSDMonthly: z.string().optional(),
+          priceCNYMonthly: z.string().nullable().optional(),
+          priceUSDYearly: z.string().nullable().optional(),
+          priceCNYYearly: z.string().nullable().optional(),
+          yearlyDiscountPercent: z.number().int().min(0).max(100).optional(),
+          stripePriceIdUSDMonthly: z.string().nullable().optional(),
+          stripePriceIdCNYMonthly: z.string().nullable().optional(),
+          stripePriceIdUSDYearly: z.string().nullable().optional(),
+          stripePriceIdCNYYearly: z.string().nullable().optional(),
+          features: z.array(z.string()).optional(),
+          featuresZh: z.array(z.string()).optional(),
+          maxUseCases: z.number().int().optional(),
+          maxTutorials: z.number().int().optional(),
+          maxBlogs: z.number().int().optional(),
+          maxApiCalls: z.number().int().optional(),
+          permissions: z
+            .object({
+              apiAccess: z.boolean().optional(),
+              customModels: z.boolean().optional(),
+              prioritySupport: z.boolean().optional(),
+              exportData: z.boolean().optional(),
+              bulkOperations: z.boolean().optional(),
+              advancedAnalytics: z.boolean().optional(),
+            })
+            .optional(),
+          monthlyDurationDays: z.number().int().optional(),
+          yearlyDurationDays: z.number().int().optional(),
+          isActive: z.boolean().optional(),
+          isPopular: z.boolean().optional(),
+          isFeatured: z.boolean().optional(),
+          sortOrder: z.number().int().optional(),
+        }),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const now = new Date()
+
+      const { permissions: _permissionsIgnored, ...rest } = input.data
+
+      const updateData: Partial<NewMembershipPlan> = {
+        ...rest,
+        updatedAt: now,
+      }
+
+      if (input.data.permissions) {
+        updateData.permissions = {
+          apiAccess: Boolean(input.data.permissions.apiAccess ?? false),
+          customModels: Boolean(input.data.permissions.customModels ?? false),
+          prioritySupport: Boolean(
+            input.data.permissions.prioritySupport ?? false
+          ),
+          exportData: Boolean(input.data.permissions.exportData ?? true),
+          bulkOperations: Boolean(
+            input.data.permissions.bulkOperations ?? false
+          ),
+          advancedAnalytics: Boolean(
+            input.data.permissions.advancedAnalytics ?? false
+          ),
+        }
+      }
+
+      const [plan] = await ctx.db
+        .update(membershipPlans)
+        .set(updateData)
+        .where(eq(membershipPlans.id, input.id))
+        .returning()
+
+      if (!plan) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: '计划不存在' })
+      }
+      return plan
+    }),
+
+  /**
+   * 管理员：删除会员计划
+   */
+  deleteMembershipPlan: adminProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const deleted = await ctx.db
+        .delete(membershipPlans)
+        .where(eq(membershipPlans.id, input.id))
+        .returning({ id: membershipPlans.id })
+
+      if (deleted.length === 0) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: '计划不存在' })
+      }
+      return { id: deleted[0]?.id }
+    }),
+
+  /**
+   * 管理员：切换状态/标记
+   */
+  toggleMembershipPlanFlags: adminProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        isActive: z.boolean().optional(),
+        isPopular: z.boolean().optional(),
+        isFeatured: z.boolean().optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, ...flags } = input
+      const now = new Date()
+      const [plan] = await ctx.db
+        .update(membershipPlans)
+        .set({ ...flags, updatedAt: now })
+        .where(eq(membershipPlans.id, id))
+        .returning()
+      if (!plan) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: '计划不存在' })
+      }
+      return plan
+    }),
+
+  /**
+   * 管理员：批量重排 sortOrder
+   */
+  reorderMembershipPlans: adminProcedure
+    .input(
+      z.object({
+        orders: z.array(
+          z.object({ id: z.string(), sortOrder: z.number().int() })
+        ),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const now = new Date()
+      for (const item of input.orders) {
+        await ctx.db
+          .update(membershipPlans)
+          .set({ sortOrder: item.sortOrder, updatedAt: now })
+          .where(eq(membershipPlans.id, item.id))
+      }
+      return { success: true }
     }),
 
   /**

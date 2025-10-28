@@ -44,6 +44,12 @@ const adminNavItems: NavItem[] = [
     badge: null,
   },
   {
+    title: '计划管理',
+    href: '/admin/plans',
+    icon: Sparkles,
+    badge: null,
+  },
+  {
     title: '系统设置',
     href: '/admin/system',
     icon: Settings,

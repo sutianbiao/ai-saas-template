@@ -2,7 +2,7 @@
 
 import { AdminGuardClient } from '@/components/auth'
 import { Button } from '@/components/ui/button'
-import { BarChart3, Home, Settings, Users } from 'lucide-react'
+import { BarChart3, Home, Settings, Users, Sparkles } from 'lucide-react'
 import Link from 'next/link'
 
 export default function AdminLayout({
@@ -31,6 +31,13 @@ export default function AdminLayout({
               <Link href="/admin/users">
                 <Users className="mr-2 h-4 w-4" />
                 用户管理
+              </Link>
+            </Button>
+
+            <Button variant="ghost" className="w-full justify-start" asChild>
+              <Link href="/admin/plans">
+                <Sparkles className="mr-2 h-4 w-4" />
+                计划管理
               </Link>
             </Button>
 
