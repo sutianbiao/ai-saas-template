@@ -23,6 +23,8 @@ export const env = createEnv({
     ANTHROPIC_API_KEY: z.string().optional(),
     GOOGLE_GENERATIVE_AI_API_KEY: z.string().optional(),
     XAI_API_KEY: z.string().optional(),
+    DEEPSEEK_API_KEY: z.string().optional(),
+    DEEPSEEK_BASE_URL: z.string().url().optional(),
 
     // Redis (用于缓存和限流)
     UPSTASH_REDIS_REST_URL: z.string().url().optional(),
@@ -118,6 +120,8 @@ export const env = createEnv({
     ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
     GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
     XAI_API_KEY: process.env.XAI_API_KEY,
+    DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY,
+    DEEPSEEK_BASE_URL: process.env.DEEPSEEK_BASE_URL,
     UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
     UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
@@ -225,7 +229,8 @@ export const isAIConfigured = () => {
     (env.OPENAI_API_KEY ||
       env.ANTHROPIC_API_KEY ||
       env.GOOGLE_GENERATIVE_AI_API_KEY ||
-      env.XAI_API_KEY)
+      env.XAI_API_KEY ||
+      env.DEEPSEEK_API_KEY)
   )
 }
 

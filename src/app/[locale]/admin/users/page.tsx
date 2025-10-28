@@ -8,7 +8,7 @@ import { Suspense } from 'react'
 
 function AdminUsersContent() {
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="container mx-auto py-2 space-y-6">
       <div>
         <h1 className="text-3xl font-bold">用户管理</h1>
         <p className="text-muted-foreground">管理平台用户和权限</p>

@@ -8,7 +8,7 @@ import { Suspense } from 'react'
 
 function AdminDashboardContent() {
   return (
-    <div className="container mx-auto py-6 space-y-6">
+    <div className="container mx-auto py-2 space-y-6">
       <div>
         <h1 className="text-3xl font-bold">管理仪表盘</h1>
         <p className="text-muted-foreground">平台运营数据总览</p>

@@ -168,10 +168,10 @@ export default function Navigation() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  'relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 group transform hover:scale-105',
+                  'relative px-3 py-2 text-sm font-medium transition-colors duration-200',
                   item.active
-                    ? 'text-blue-600 dark:text-white bg-gradient-to-r from-blue-500/30 to-purple-500/30 dark:from-blue-500/20 dark:to-purple-500/20 backdrop-blur-sm border border-blue-400/50 dark:border-blue-400/30 shadow-[0_0_20px_rgba(59,130,246,0.4)] dark:shadow-[0_0_20px_rgba(59,130,246,0.3)]'
-                    : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-gray-100/80 dark:hover:bg-white/10 hover:backdrop-blur-sm hover:border hover:border-gray-300/50 dark:hover:border-white/20 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)] dark:hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]'
+                    ? 'text-blue-600 dark:text-white'
+                    : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white'
                 )}
                 style={{
                   transformStyle: 'preserve-3d',
@@ -179,10 +179,8 @@ export default function Navigation() {
               >
                 <span className="relative z-10">{item.label}</span>
                 {item.active && (
-                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-8 h-0.5 bg-blue-500/80 rounded-full" />
                 )}
-                {/* 3D悬浮效果背景 */}
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
               </Link>
             ))}
           </div>
@@ -402,20 +400,18 @@ export default function Navigation() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    'relative block px-4 py-3 text-base font-medium rounded-lg transition-all duration-300 transform hover:scale-105 hover:translate-x-2',
+                    'relative block px-2 py-2 text-base font-medium transition-colors duration-200',
                     item.active
-                      ? 'text-blue-600 dark:text-white bg-gradient-to-r from-blue-500/40 to-purple-500/40 dark:from-blue-500/30 dark:to-purple-500/30 backdrop-blur-sm border border-blue-400/60 dark:border-blue-400/40 shadow-[0_0_20px_rgba(59,130,246,0.5)] dark:shadow-[0_0_20px_rgba(59,130,246,0.4)]'
-                      : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white hover:bg-gray-100/80 dark:hover:bg-white/10 hover:backdrop-blur-sm hover:border hover:border-gray-300/50 dark:hover:border-white/20 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] dark:hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]'
+                      ? 'text-blue-600 dark:text-white'
+                      : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-white'
                   )}
                   style={{ transformStyle: 'preserve-3d' }}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <span className="relative z-10">{item.label}</span>
                   {item.active && (
-                    <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-1 h-6 bg-gradient-to-b from-blue-500 to-purple-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.8)]" />
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500/80" />
                   )}
-                  {/* 3D悬浮背景 */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 rounded-lg opacity-0 hover:opacity-100 transition-all duration-300 -z-10 transform hover:scale-105" />
                 </Link>
               ))}
             </div>

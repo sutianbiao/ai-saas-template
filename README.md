@@ -316,6 +316,7 @@ Choose and configure at least one AI provider:
 - **Anthropic**: Get API key from [Anthropic Console](https://console.anthropic.com)
 - **Google AI**: Get API key from [Google AI Studio](https://aistudio.google.com)
 - **xAI**: Get API key from [xAI Console](https://console.x.ai)
+ - **DeepSeek**: Get API key from `https://platform.deepseek.com` and set `DEEPSEEK_API_KEY`. Optional `DEEPSEEK_BASE_URL` (default `https://api.deepseek.com`).
 
 ### Database Configuration
 
